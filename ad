@@ -1,0 +1,65 @@
+[33mcommit 8031eb67f9e246a1d7c7fc0dddf785b839ad6927[m[33m ([m[1;36mHEAD -> [m[1;32mrefs/heads/main[m[33m, [m[1;31mrefs/remotes/origin/main[m[33m)[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Sat Oct 5 00:05:20 2024 +0300
+
+    added more much much more: working text splitting, high score, lives, invincibility etc..
+
+[33mcommit 6dd97ac1a79b8a73a596edeffdb48135b5213305[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 22:01:32 2024 +0300
+
+    added bunch of stuff mostly text
+
+[33mcommit 5c5c247068150d2b1642e7e9502ed4f7eeaa7520[m[33m ([m[1;32mrefs/heads/feature[m[33m)[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 19:10:03 2024 +0300
+
+    "New Stuf"
+
+[33mcommit bf1340e84b6516af093eafb31df9f820c5d1b70f[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 18:11:16 2024 +0300
+
+    added power ups, and destroying rocks 1
+
+[33mcommit 9d45ac78452a60ab485c6cd60483251257a2f688[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 16:05:29 2024 +0300
+
+    shooting 1
+
+[33mcommit 856dd09df50dba6f9ff595b59baa26c77b6f0bfa[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 15:12:11 2024 +0300
+
+    colored astreoids!
+
+[33mcommit 0d8ec814cfd5ed016629f7c52721bdd0101bf499[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 15:07:37 2024 +0300
+
+    astroides added :)
+
+[33mcommit e66a1108c77f3a37c8fbeace1c2b610daa1ba7b9[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 14:30:39 2024 +0300
+
+    new gameplay player
+
+[33mcommit e0be64725ab70aba529470c6cac1cfac2be2bdc3[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Fri Oct 4 13:32:58 2024 +0300
+
+    added player
+
+[33mcommit 3335d01a222b3ab25773bae142a429ec6f00d17d[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Thu Oct 3 22:54:56 2024 +0300
+
+    more codes for the game added gitignore
+
+[33mcommit 4468fb2f9d2b476cf0e09bbc5ad301fd04c62c57[m
+Author: github_ratzking <ben.farjun99@gmail.com>
+Date:   Thu Oct 3 22:33:13 2024 +0300
+
+    starting game!

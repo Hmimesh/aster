@@ -8,9 +8,6 @@ from shot import *
 from power_up import PowerUp
 import random
 from ui.ui import *
-from explosion import Explosion, load_explosion_images
-
-explosion_anim = load_explosion_images()
 
 updatable = pygame.sprite.Group()
 drawable = pygame.sprite.Group()
@@ -52,10 +49,7 @@ def handle_collisions(player, asteroids, shots, power_ups, ui_manager):
             global lives
             lives -= 1
             player.kill()  # This removes the player from all groups
-            expl = Explosion(player.rect.center, 'lg', explosion_anim)
-            updatable.add(expl)
-            drawable.add(expl)
-
+            
             if lives > 0:
                 # Respawn the player at the center
                 player.respawn(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -76,9 +70,6 @@ def handle_collisions(player, asteroids, shots, power_ups, ui_manager):
                 shot.kill()  # Also remove the shot that hit
                 asteroid.split()
                 score += 100
-                expl = Explosion(asteroid.rect.center, 'lg', explosion_anim)
-                updatable.add(expl)
-                drawable.add(expl)
                 
             if score > high_score:
                 high_score = score
@@ -98,7 +89,7 @@ def remove_offscreen_objects(shots, power_ups, screen_width, screen_height):
 
 
 def main():
-    global score, high_score, lives
+    global score, high_score
     pygame.init()
     clock = pygame.time.Clock()
     dt = 0
