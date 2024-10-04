@@ -11,3 +11,14 @@ PLAYER_TURN_SPEED = 300
 PLAYER_SPEED = 200
 SHOT_RADIUS = 5
 PLAYER_SHOTS_SPEED = 500
+PLAYER_SHOTS_COOLDOWN = 0.3
+
+RAINBOW_COLORS = [
+    (255, 0, 0),    # Red
+    (255, 127, 0),  # Orange
+    (255, 255, 0),  # Yellow
+    (0, 255, 0),    # Green
+    (0, 0, 255),    # Blue
+    (75, 0, 130),   # Indigo
+    (143, 0, 255)   # Violet
+]

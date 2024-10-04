@@ -1,13 +1,16 @@
 from circleshape import *
-from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOTS_SPEED
+from constants import *
 import pygame 
 from shot import Shot
+import random
 class Player (CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.rotational_velocity = 0
         self.velocity = pygame.Vector2(0, 0)
+        self.timer = 0
+        self.mega_lazer = 0
         
 # in the player class
     def triangle(self):
@@ -33,6 +36,12 @@ class Player (CircleShape):
         self.velocity += forward * direction * PLAYER_SPEED * dt
 
     def update(self, dt):
+        self.timer -= dt
+        if self.mega_lazer > 0:
+            self.mega_lazer -= dt 
+            if self.mega_lazer < 0:
+                self.mega_lazer = 0
+        
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -52,5 +61,25 @@ class Player (CircleShape):
         self.velocity *= 0.99
 
     def shoot(self):
-        shot = Shot(self.position.x, self.position.y)
-        shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOTS_SPEED
+        if self.mega_lazer > 0:
+            lazer_color = random.choice(RAINBOW_COLORS)
+            shot = Shot(self.position.x, self.position.y, color = lazer_color)
+            shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOTS_SPEED
+            self.timer = PLAYER_SHOTS_COOLDOWN
+    
+        else:
+            lazer_color =(255, 255, 0)
+        if self.timer > 0:
+            return f"oh no we need to wait:{self.timer}"
+        if self.timer < 0: 
+            shot = Shot(self.position.x, self.position.y, color = lazer_color)
+            shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOTS_SPEED
+            self.timer = PLAYER_SHOTS_COOLDOWN
+    
+    def activate_mega_lazer(self):
+        self.mega_lazer += 5
+        if self.mega_lazer > 15:
+            self.mega_lazer = 15  
+
+    def is_off_screen(self, SCREEN_WIDTH, SCREEN_HEIGHT):
+        
