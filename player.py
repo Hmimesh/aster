@@ -13,6 +13,9 @@ class Player (CircleShape):
         self.mega_lazer = 0
         self.screen_h = SCREEN_HEIGHT
         self.screen_w = SCREEN_WIDTH
+        self.invincibilty_timer = 0
+        self.invincible = False
+        self.color = [255, 255, 255]
         
 # in the player class
     def triangle(self):
@@ -26,7 +29,7 @@ class Player (CircleShape):
     def draw(self, screen):
         pygame.draw.polygon(
             screen,
-            "white",
+            self.color,
             self.triangle(),
             2
             )
@@ -44,6 +47,14 @@ class Player (CircleShape):
             if self.mega_lazer < 0:
                 self.mega_lazer = 0
         
+        if self.invincible:
+            self.invincibilty_timer += dt
+            self.color = [255, 0, 255]
+            if self.invincibilty_timer >= INVINCIBILITY_DURATION: 
+                self.color = [255, 255, 255]
+                self.invincible = False
+
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -63,6 +74,16 @@ class Player (CircleShape):
         self.velocity *= 0.99
         self.is_off_screen()
 
+    def can_collide(self):
+        return not self.invincible 
+    
+    def respawn(self, x, y):
+        self.position = pygame.Vector2(x, y)
+        self.velocity = pygame.Vector2(0, 0)
+        self.invincible = True  # Make player invincible after respawn
+        self.invincibilty_timer = 0  # Reset invincibility timer
+        print(f"Player is in {x},{y}")
+    
     def shoot(self):
         if self.mega_lazer > 0:
             lazer_color = random.choice(RAINBOW_COLORS)

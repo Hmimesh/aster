@@ -1,32 +1,52 @@
 import pygame
 pygame.font.init()
+
+def read_high_score(filepath):
+    try:
+        with open(filepath, 'r') as file:
+            high_score = int(file.read())
+            return high_score
+    except FileNotFoundError:
+        return 0
+    
+def write_high_score(filepath, high_score):
+    with open(filepath,'w') as file:
+        file.write(str(high_score))
+    
+
+
 lives = 3
 score = 0
-high_score = float("-inf")
+high_score = read_high_score("high_score.txt")
 message_display_time =  0
 message_time_remaining = 0
 
-if score > high_score:
-     high_score =  score
-
+def get_high_score (high_score, score):
+    if score > high_score:
+        high_score =  score
+        write_high_score("high_score.txt", high_score)
+    else:
+        return high_score 
+    
 class UIManager:
     def __init__(self):
         self.messages = []
     
     def add_message(self, text, position, duration):
-        self.messages(
-            {"text": text,
+        self.messages.append(
+            {
+            "text": text,
             "position": position,
-            "remaining": duration}
-            )
+            "remaining": duration
+            }
+        )
     
     def update(self, delta_time):
         for message in self.messages:
             message["remaining"] -= delta_time
 
-        for m in self.messages:
-            if m["remaining"] > 0:
-                return message 
+        self.messages = [m for m in self.messages if m["remaining"] > 0]
+            
     def render(self, screen):
         for message in self.messages:
             render_text(screen,
@@ -57,15 +77,3 @@ def render_text(
     inside_text = font.render(text, True, inside_color)
 
     screen.blit(inside_text, position)
-def read_high_score(filepath):
-    try:
-        with open(filepath, 'r') as file:
-            high_score = int(file.read())
-            return high_score
-    except FileNotFoundError:
-        return 0
-    
-def write_high_score(filepath, high_score):
-    with open(filepath,'w') as file:
-        file.write(str(high_score))
-    pass
