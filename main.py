@@ -7,6 +7,7 @@ import sys
 from shot import *
 from power_up import PowerUp
 import random
+from ui import *
 
 updatable = pygame.sprite.Group()
 drawable = pygame.sprite.Group()
@@ -20,25 +21,40 @@ AsteroidField.containers =(updatable,)
 Shot.containers = (updatable, drawable, shots)
 PowerUp.containers = (updatable, drawable, power_ups)
 
-def handle_collisions(player, asteroids, shots, power_ups):
+
+def handle_collisions(player, asteroids, shots, power_ups, ui_manager):
     # Player vs Power-ups
     for power_up in power_ups:
         if player.collides_with(power_up):
             player.activate_mega_lazer()
-            print(f"{power_up} collected!")
+            ui_manager.add_message(
+                f"{power_up}! Use it quickly! {player.mega_lazer}",
+                (1000, 10)
+            )
+            message_display_time = player.mega_lazer
             power_up.kill()
-
+    
     # Player vs Asteroids
     for asteroid in asteroids:
         if player.collides_with(asteroid):
-            print("GAME OVER!")
-            sys.exit()
+            global lives
+            lives -= 1
+            player.kill()
+            if lives > 0:
+                player = Player(0,0)
+            else:
+                print("GAME OVER!")
+                sys.exit()
 
         # Shots vs Asteroids
         for shot in shots:
             if asteroid.collides_with(shot):
                 shot.kill()  # Also remove the shot that hit
                 asteroid.split()
+                global score
+                score += 100
+                write_high_score("./workspace/github.com/hmimesh/Astreoid/ui.py", high_score)
+
 def remove_offscreen_objects(shots, power_ups, screen_width, screen_height):
     # Remove off-screen shots
     for shot in shots:
@@ -60,8 +76,11 @@ def main():
     asteroid_fields = AsteroidField()
     power_up_timer = 0
     power_up_spawn_interval = random.randrange(5, 15)
+    ui_manager = UIManager()
+    handle_collisions(player, asteroids, shots, power_ups, ui_manager)
+    read_high_score("./workspace/github.com/hmimesh/Astreoid/ui.py")
 
-    print("Starting asteroids!")
+    
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
 
@@ -70,7 +89,18 @@ def main():
             if event.type == pygame.QUIT:
                 return
         
+        delta_time = clock.get_time()
+
         screen.fill((0, 0, 0,))
+        
+        ui_manager.update(delta_time)
+        ui_manager.render(screen)
+
+        render_text(screen, GAME_NAME, (10,10))
+        render_text(screen, f"score:{score}", (10, 50))
+        render_text(screen, f"live : {lives}", (10, 90))
+        render_text(screen, f"high score: {high_score} !", (500, 10))
+        
 
         power_up_timer += dt
 
@@ -86,7 +116,7 @@ def main():
             thing.update(dt)
 
         # Handle collisions
-        handle_collisions(player, asteroids, shots, power_ups)
+        handle_collisions(player, asteroids, shots, power_ups, ui_manager)
 
         # Remove off-screen shots and power-ups
         remove_offscreen_objects(shots, power_ups, SCREEN_WIDTH, SCREEN_HEIGHT)
