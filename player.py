@@ -11,6 +11,8 @@ class Player (CircleShape):
         self.velocity = pygame.Vector2(0, 0)
         self.timer = 0
         self.mega_lazer = 0
+        self.screen_h = SCREEN_HEIGHT
+        self.screen_w = SCREEN_WIDTH
         
 # in the player class
     def triangle(self):
@@ -59,6 +61,7 @@ class Player (CircleShape):
         self.rotational_velocity *= 0.99 
         self.position += self.velocity * dt
         self.velocity *= 0.99
+        self.is_off_screen()
 
     def shoot(self):
         if self.mega_lazer > 0:
@@ -81,5 +84,13 @@ class Player (CircleShape):
         if self.mega_lazer > 15:
             self.mega_lazer = 15  
 
-    def is_off_screen(self, SCREEN_WIDTH, SCREEN_HEIGHT):
-        
+    def is_off_screen(self):
+        if self.position.x > SCREEN_WIDTH:
+            self.position.x = 0
+        elif self.position.x < 0:
+            self.position.x = SCREEN_WIDTH 
+
+        if self.position.y > SCREEN_HEIGHT:
+            self.position.y = 0  
+        elif self.position.y < 0:
+            self.position.y = SCREEN_HEIGHT 

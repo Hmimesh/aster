@@ -2,6 +2,8 @@ import pygame
 import random
 from constants import *
 
+
+
 class PowerUp(pygame.sprite.Sprite):
     def __init__(self, screen_width, screen_height):
         super().__init__(PowerUp.containers)  # Ensure it's added to the containers
