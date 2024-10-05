@@ -28,9 +28,9 @@ class MusicManager:
     def switch_music(self, score):
         if self.power_up_active:
             return 
-        elif score < 1000:
+        elif score < 10000:
             new_music = self.music_loop1
-        elif 1000 <= score < 4500:
+        elif 10000 <= score < 20000:
             new_music = self.music_loop2
         else:
             new_music = self.music_loop3

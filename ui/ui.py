@@ -20,7 +20,8 @@ score = 0
 high_score = read_high_score("high_score.txt")
 message_display_time =  0
 message_time_remaining = 0
-
+last_live_score = 0
+message_shown = False
 def get_high_score (high_score, score):
     if score > high_score:
         high_score =  score
@@ -40,10 +41,12 @@ class UIManager:
             "remaining": duration
             }
         )
+        return self.messages
     
     def update(self, delta_time):
         for message in self.messages:
             message["remaining"] -= delta_time
+
 
         self.messages = [m for m in self.messages if m["remaining"] > 0]
             

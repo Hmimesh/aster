@@ -1,7 +1,7 @@
 import pygame
 from constants import *
-from player import *
-from asteroid import *
+from player import Player
+from asteroid import Asteroid
 from asteroidfield import *
 import sys
 from shot import *
@@ -25,10 +25,12 @@ current_music = None
 power_up_active = False
 
 def handle_collisions(player, asteroids, shots, power_ups, ui_manager, music_manager):
-    global score, high_score, power_up_active
+    global score, high_score, power_up_active, lives, last_live_score, message_shown
     # Player vs Power-ups
     for power_up in power_ups:
         if player.collides_with(power_up):
+            if player.mega_lazer <= 0:
+                music_manager.stop_power_up_music(score)
             score += 50
             player.activate_mega_lazer()
             ui_manager.add_message(
@@ -36,7 +38,7 @@ def handle_collisions(player, asteroids, shots, power_ups, ui_manager, music_man
                 (1000, 10),
                 duration = 5
             )
-            ui_manager.message_display_time = player.mega_lazer
+            ui_manager.add_message(f"{player.mega_lazer}", (10, 40), player.mega_lazer)
             power_up.kill()
             music_manager.play_power_up_sound()
             power_up_active = True
@@ -48,7 +50,6 @@ def handle_collisions(player, asteroids, shots, power_ups, ui_manager, music_man
     # Player vs Asteroids
     for asteroid in asteroids:
         if player.can_collide() and player.collides_with(asteroid):
-            global lives
             lives -= 1
             player.kill()  # This removes the player from all groups
             music_manager.play_player_hit_sound()
@@ -78,6 +79,11 @@ def handle_collisions(player, asteroids, shots, power_ups, ui_manager, music_man
                 high_score = score
                 write_high_score("high_score.txt", high_score)
                 print(f"New high score: {high_score}")
+                
+            if score % 5000 == 0 and score > 0 and score != last_live_score:
+                lives += 1
+                last_live_score = score 
+
 
 def remove_offscreen_objects(shots, power_ups, screen_width, screen_height):
     # Remove off-screen shots
@@ -92,7 +98,7 @@ def remove_offscreen_objects(shots, power_ups, screen_width, screen_height):
 
 
 def main():
-    global score, high_score
+    global score, high_score, message_shown
     pygame.init()
     pygame.mixer.init()
     music_manager = MusicManager()
@@ -106,11 +112,7 @@ def main():
     power_up_timer = 0
     power_up_spawn_interval = random.randrange(5, 15)
     ui_manager = UIManager()
-    handle_collisions(player, asteroids, shots, power_ups, ui_manager, music_manager)
-    
-    
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
+   
 
     while True:
         for event in pygame.event.get():
@@ -120,7 +122,10 @@ def main():
         delta_time = clock.get_time()
 
         screen.fill((0, 0, 0,))
-        
+
+        if score >= 500 and not message_shown:
+            ui_manager.add_message("You've reached 500 points!", (500, 100), 3)
+            message_shown = True
         ui_manager.update(delta_time)
         ui_manager.render(screen)
 
@@ -131,7 +136,10 @@ def main():
         
         music_manager.switch_music(score)
         power_up_timer += dt
-
+        
+        if player.mega_lazer == 0 and music_manager.power_up_active:
+            music_manager.stop_power_up_music(score)
+        
         # Spawn Power-ups
         if power_up_timer >= power_up_spawn_interval:
             PowerUp(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -144,7 +152,7 @@ def main():
 
         # Handle collisions
         handle_collisions(player, asteroids, shots, power_ups, ui_manager, music_manager)
-
+        
         # Remove off-screen shots and power-ups
         remove_offscreen_objects(shots, power_ups, SCREEN_WIDTH, SCREEN_HEIGHT)
 
