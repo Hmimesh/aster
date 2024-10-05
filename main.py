@@ -127,7 +127,7 @@ def main():
             ui_manager.add_message("You've reached 500 points!", (500, 100), 3)
             message_shown = True
         ui_manager.update(delta_time)
-        ui_manager.render(screen)
+        ui_manager.render(screen)   
 
         render_text(screen, GAME_NAME, (10,10))
         render_text(screen, f"score:{score}", (10, 50))
